@@ -1,19 +1,26 @@
 #include <iostream>
 #include <stdio.h>
+#include <boost/xpressive/xpressive.hpp>
 
-using namespace std;
+using namespace boost;
+using namespace xpressive;
 
 void test(void){
-    cout << "hello from another function";
+    std::cout << "hello from another function";
 }
 
 int main(int argc, const char * argv[]) {
     int bob = 0;
-        cout << bob++ << endl;
+    
+    std::string str("tweet");
+    xpressive::sregex rx = sregex::compile("(?P<char>.)(?P=char)");
+    smatch what;
+    if(regex_search(str, what, rx))
+    {
+        std::cout << "char = " << what["char"] << std::endl;
+    }
+    
 
-
-        cout << endl;
-        system("pause");
     return 0;
 }
 

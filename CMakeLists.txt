@@ -7,3 +7,4 @@ project ("Nolfaris")
 
 # Include sub-projects.
 add_subdirectory ("src")
+
