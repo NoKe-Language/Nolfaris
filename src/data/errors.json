@@ -1,0 +1,11 @@
+{
+    "types": {
+        "compiler_internal": "Compiler internal error."
+    },
+    "number": {
+        "0" : {
+            "type": "compiler_internal",
+            "content": "An error occured. Isn't that a useful error message ?"
+        }
+    }
+}

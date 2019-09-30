@@ -1,5 +1,6 @@
 #include <iostream>
-#include "../headers/tools.h"
+#include "../headers/tools.hpp"
+#include "../headers/error.h"
 
 int main()
 {
@@ -8,7 +9,12 @@ int main()
     std::string rules;
     tools::readFile(GRAMMAR_JSON, rules);
     std::cout << rules << std::endl;
-#endif
+
+
+    nolfaris::throwError(0, nolfaris::NObjectPosition(678, GRAMMAR_JSON));
+#else
+    throw std::runtime_error("Could not load the grammar rules.");
+#endif 
 
     // rapidjson::Document document;
     // document.Parse(json);
