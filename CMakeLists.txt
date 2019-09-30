@@ -6,7 +6,7 @@ cmake_minimum_required (VERSION 3.8)
 project ("Nolfaris")
 
 # add boost
-find_package(Boost 1.69.0 COMPONENTS regex)
+find_package(Boost 1.69.0 COMPONENTS regex program_options)
 include_directories(${Boost_INCLUDE_DIRS})
 
 # add json

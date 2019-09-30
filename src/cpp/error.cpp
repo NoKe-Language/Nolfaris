@@ -23,14 +23,16 @@ json _getJson()
     tools::readFile(ERRORS_JSON, str);
     return json::parse(str);
 #else
-    throw std::runtime_error("[internal] Could not read the error json.");
+    throwError("Compiler internal error. Could not load the error json.");
 #endif
 }
 
-void throwError(int const &id, NObjectPosition const &position, std::string const &stack)
+void _generateBaseErrorInfo(std::stringstream &message, NObjectPosition const &position, std::string const &stack)
 {
-    auto data = _getJson();
-    std::stringstream message;
+    message << "NoKe compiler has encountered an "
+            << tools::colored("error", "red")
+            << ".  (︶︿︶)"
+            << std::endl;
 
     if (stack != "")
     {
@@ -71,18 +73,56 @@ void throwError(int const &id, NObjectPosition const &position, std::string cons
             }
             else
             {
-                throw std::runtime_error("Could not open the file: \"" + position.file + "\"");
+                throwError("Could not open the file: \"" + position.file + "\"", "compiler_internal");
             }
         }
     }
+}
+
+void throwError(int const &id, NObjectPosition const &position, std::string const &stack)
+{
+    auto data = _getJson();
+    std::stringstream message;
+
+    _generateBaseErrorInfo(message, position, stack);
+
     // add the error info
-    // message += colored(error_list["types"][error_list["number"][str(nb)]["type"]] + " " + error_list["number"][str(nb)]["content"],"yellow")
+    message << tools::colored((std::string)data["types"][(std::string)data["number"][std::to_string(id)]["type"]] + " " + (std::string)data["number"][std::to_string(id)]["content"], "yellow")
+            << std::endl
+            << std::endl;
 
-    std::cout << tools::colored((std::string)data["types"][(std::string)data["number"][std::to_string(id)]["type"]] + " " + (std::string)data["number"][std::to_string(id)]["content"], "yellow")
-              << std::endl << std::endl;
-    // message << data["types"][error_type];
-
+    // throw
     std::cout << message.str() << std::endl;
+    std::exit(1); //meta break with exit code 1 (error)
+}
+
+void throwError(std::string const &msg, std::string const &errorType, NObjectPosition const &position, std::string const &stack)
+{
+    std::stringstream message;
+
+    _generateBaseErrorInfo(message, position, stack);
+
+    // add the error info
+
+    std::string errorDescription = "";
+
+    if (errorType != "")
+    {
+        auto data = _getJson();
+        if (data["types"].contains(errorType))
+        {
+            errorDescription += (std::string)data["types"][errorType] + " ";
+        }
+    }
+    errorDescription += msg;
+
+    message << tools::colored(errorDescription, "yellow")
+            << std::endl
+            << std::endl;
+
+    // throw
+    std::cout << message.str() << std::endl;
+    std::exit(1); //meta break with exit code 1 (error)
 }
 
 } // namespace nolfaris

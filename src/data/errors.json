@@ -1,6 +1,7 @@
 {
     "types": {
-        "compiler_internal": "Compiler internal error."
+        "compiler_internal": "Compiler internal error.",
+        "cli_error": "CLI error."
     },
     "number": {
         "0" : {

@@ -5,6 +5,8 @@
 #include <sstream>
 #include <iostream>
 
+bool tools::VERBOSE;
+
 void tools::readFile(std::string filePath, std::string &output)
 {
     std::ifstream file(filePath);
@@ -52,10 +54,6 @@ tools::Coords tools::Coords::fromPosition(int position, std::string filePath)
                 columnCounter++;
             }
         }
-
-        std::cout << Coords(lineCounter, columnCounter, position).toString()
-                  << std::endl;
-
         return Coords(lineCounter, columnCounter, position);
     }
     else
@@ -64,9 +62,24 @@ tools::Coords tools::Coords::fromPosition(int position, std::string filePath)
     }
 }
 
+void tools::logl(std::string const& str){
+    if(tools::VERBOSE){
+        std::cout << str << std::endl;
+    }
+}
+
+void tools::log(std::string const& str){
+     if(tools::VERBOSE){
+        std::cout << str;
+    }
+}
+
 std::string tools::colored(std::string const& str, std::string const& color){
     if (color == "yellow"){
         return "\e[33m" + str + "\e[m";
+    }
+    else if (color == "red"){
+        return "\e[31m" + str + "\e[m";
     }
     else{
         return str;

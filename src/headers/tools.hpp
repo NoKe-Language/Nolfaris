@@ -8,7 +8,13 @@
 namespace tools
 {
 
+extern bool VERBOSE;
+
 void readFile(std::string filePath, std::string &output);
+
+void logl(std::string const& str);
+
+void log(std::string const& str);
 
 std::string colored(std::string const& str, std::string const& color);
 
