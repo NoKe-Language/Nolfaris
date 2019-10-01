@@ -1,5 +1,5 @@
 # minimum required CMAKE version
-CMAKE_MINIMUM_REQUIRED(VERSION 3.7 FATAL_ERROR)
+CMAKE_MINIMUM_REQUIRED(VERSION 3.8 FATAL_ERROR)
 
 
 project ("Nolfaris")
@@ -11,7 +11,7 @@ include_directories(${Boost_INCLUDE_DIRS})
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
 # compiler must be 11 or 14
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 
 # required if linking to static library
 add_definitions(-DANTLR4CPP_STATIC)
@@ -25,6 +25,7 @@ include_directories(${ANTLR4_INCLUDE_DIRS})
 
 # set variable pointing to the antlr tool that supports C++
 # this is not required if the jar file can be found under PATH environment
+set(ANTLR_EXECUTABLE /usr/local/lib/antlr-4.7.2-complete.jar)
 
 # add macros to generate ANTLR Cpp code from grammar
 find_package(ANTLR REQUIRED)
@@ -75,4 +76,4 @@ add_executable (Nolfaris
 )
 
 # add generated grammar to demo binary target
-target_link_libraries(demo antlr4_static ${Boost_LIBRARIES})
+target_link_libraries(Nolfaris antlr4_static ${Boost_LIBRARIES})
