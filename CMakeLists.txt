@@ -1,7 +1,6 @@
-# CMakeList.txt : Top-level CMake project file, do global configuration
-# and include sub-projects here.
-#
-cmake_minimum_required (VERSION 3.8)
+# minimum required CMAKE version
+CMAKE_MINIMUM_REQUIRED(VERSION 3.7 FATAL_ERROR)
+
 
 project ("Nolfaris")
 
@@ -9,8 +8,37 @@ project ("Nolfaris")
 find_package(Boost 1.69.0 COMPONENTS regex program_options)
 include_directories(${Boost_INCLUDE_DIRS})
 
-# add json
-# find_package(nlohmann_json 3.2.0 REQUIRED)
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+
+# compiler must be 11 or 14
+set(CMAKE_CXX_STANDARD 14)
+
+# required if linking to static library
+add_definitions(-DANTLR4CPP_STATIC)
+
+# using /MD flag for antlr4_runtime (for Visual C++ compilers only)
+set(ANTLR4_WITH_STATIC_CRT OFF)
+# add external build for antlrcpp
+include(ExternalAntlr4Cpp)
+# add antrl4cpp artifacts to project environment
+include_directories(${ANTLR4_INCLUDE_DIRS})
+
+# set variable pointing to the antlr tool that supports C++
+# this is not required if the jar file can be found under PATH environment
+
+# add macros to generate ANTLR Cpp code from grammar
+find_package(ANTLR REQUIRED)
+
+# Call macro to add lexer and grammar to your build dependencies.
+antlr_target(SampleGrammarLexer NokeLexer.g4 LEXER
+             PACKAGE nolfaris)
+antlr_target(SampleGrammarParser NokeParser.g4 PARSER
+             PACKAGE nolfaris
+             DEPENDS_ANTLR SampleGrammarLexer)
+
+# include generated files in project environment
+include_directories(${ANTLR_SampleGrammarLexer_OUTPUT_DIR})
+include_directories(${ANTLR_SampleGrammarParser_OUTPUT_DIR})
 
 # Add the data files
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/src/data/grammar_rules.json ${CMAKE_CURRENT_BINARY_DIR}/src/data/grammar_rules.json COPYONLY) 
@@ -38,11 +66,13 @@ set ( DEPENDENCIES_SRC
     "src/standalone_libs/json.hpp"
 )
 
-add_executable (Nolfaris ${TARGET_SRC} ${TARGET_H} ${DEPENDENCIES_SRC})
+add_executable (Nolfaris 
+    ${TARGET_SRC} 
+    ${TARGET_H} 
+    ${DEPENDENCIES_SRC} 
+    ${ANTLR_SampleGrammarLexer_CXX_OUTPUTS}
+    ${ANTLR_SampleGrammarParser_CXX_OUTPUTS}
+)
 
-# enable c++ 17
-target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)
-
-# link libraries
-# set (json_LIBRARIES PRIVATE nlohmann_json::nlohmann_json)
-target_link_libraries(Nolfaris ${Boost_LIBRARIES})
+# add generated grammar to demo binary target
+target_link_libraries(demo antlr4_static ${Boost_LIBRARIES})
