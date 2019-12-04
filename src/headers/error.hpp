@@ -2,7 +2,7 @@
 #define ERROR_H_INCLUDED
 
 #include <string>
-#include "nobject.h"
+#include "nobject.hpp"
 
 namespace nolfaris
 {

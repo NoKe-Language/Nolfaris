@@ -22,8 +22,8 @@ add_definitions("-DERRORS_JSON=\"${CMAKE_CURRENT_BINARY_DIR}/src/data/errors.jso
 # Add source to this project's executable.
 
 set ( TARGET_H 
-    "src/headers/error.h"
-    "src/headers/nobject.h"
+    "src/headers/error.hpp"
+    "src/headers/nobject.hpp"
     "src/headers/tools.hpp" 
 )
 

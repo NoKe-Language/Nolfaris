@@ -1,6 +1,6 @@
 #include <iostream>
 #include "../headers/tools.hpp"
-#include "../headers/error.h"
+#include "../headers/error.hpp"
 #include <boost/program_options/options_description.hpp>
 #include <boost/program_options/variables_map.hpp>
 #include <boost/program_options/parsers.hpp>

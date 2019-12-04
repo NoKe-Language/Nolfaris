@@ -1,7 +1,7 @@
-#include "../headers/error.h"
+#include "../headers/error.hpp"
 
 #include "../headers/tools.hpp"
-#include "../headers/nobject.h"
+#include "../headers/nobject.hpp"
 #include <iostream>
 #include <string>
 #include <sstream>
